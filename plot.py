@@ -32,7 +32,7 @@ if len(sys.argv[1:]) > 0:
 		help()
 	else:
 		for filename in sys.argv[1:]:
-			realname = filename.split(".")[:-1]
+			realname = "".join(filename.split(".")[:-1])
 			if os.path.isfile(filename):
 				with open(sys.argv[1], 'r') as file:
 					lines = file.readlines()
@@ -49,6 +49,7 @@ if len(sys.argv[1:]) > 0:
 					plt.yscale('log')
 					ax.hist(data[i], 50,bottom=1)
 					fig.savefig(realname + "_" + str(i) + ".jpg")
+					print "Created " + realname + "_" + str(i) + ".jpg"
 			else:
 				print "[FAILED] File " + filename + " doesn't exist here!"
 				help()
