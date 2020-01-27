@@ -10,6 +10,7 @@
 
 # Convert all files in this directory that have a .md suffix
 SOURCE_DOCS := $(wildcard *.md)
+CURRENT_DIR := ${CURDIR}
 
 EXPORTED_DOCS=\
  $(SOURCE_DOCS:.md=.html) \
@@ -18,14 +19,16 @@ EXPORTED_DOCS=\
 EXPORTED_DOCS_HTML=\
  $(SOURCE_DOCS:.md=.html)
 
-PANDOC=C:\Users\User\Programmes\pandoc\pandoc.exe
+PANDOC="C:\Users\matthieu.denoux\Anaconda3\Scripts\pandoc.exe"
 
-PDFLATEX=C:\Program\ Files\MiKTeX\ 2.9\miktex\bin\x64\pdflatex.exe
+PDFLATEX="C:\Users\matthieu.denoux\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\x64\pdflatex"
 
-PANDOC_OPTIONS=-s
+FILTER=filter.bat
 
-PANDOC_HTML_OPTIONS=--mathjax
-PANDOC_PDF_OPTIONS=--pdf-engine=$(PDFLATEX)
+PANDOC_OPTIONS=-s --number-sections --toc --filter=pandoc-citeproc --csl=apapersonnalized.csl --from markdown+pipe_tables+footnotes
+
+PANDOC_HTML_OPTIONS=--mathjax -c style.css
+PANDOC_PDF_OPTIONS=--filter=pandoc-latex-admonition --filter=pandoc-latex-tip --pdf-engine=$(PDFLATEX)
 PANDOC_DOCX_OPTIONS=
 PANDOC_RTF_OPTIONS=
 PANDOC_ODT_OPTIONS=
@@ -38,7 +41,7 @@ PANDOC_EPUB_OPTIONS=--to epub3
 	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_HTML_OPTIONS) -o $@ $<
 
 %.pdf : %.md
-	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_PDF_OPTIONS) -o $@ $<
+	$(PANDOC) $(PANDOC_OPTIONS) -o $@ $< $(PANDOC_PDF_OPTIONS)
 
 %.docx : %.md
 	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_DOCX_OPTIONS) -o $@ $<
